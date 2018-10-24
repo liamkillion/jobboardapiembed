@@ -25,16 +25,10 @@ fetch(departments_url).then(resp=>resp.json()).then(data=>data['departments']).t
     document.getElementById(`${department['name']}-header`).appendChild(ul)
   })
 })
-// let departments_url = "https://api.greenhouse.io/v1/boards/cardboard/departments?content=true"
-// fetch(departments_url).then((resp=>resp.json())).then(data=>data['departments']).then(departments => {
-//   departments.forEach(department=>{
-//     let h3 = document.createElement('h3')
-//     h3.innerHTML=(department['name'])
-//     let ul = document.createElement('ul')
-//     ul.setAttribute('id',`${department['name']}`)
-//     document.getElementById('jobs-by-department').appendChild(h3)
-//   })
-// }
+
+fetch(jobs_url).then(resp=>resp.json()).then(data=>data['jobs']).then(jobs=>{
+  jobs.forEach ???
+})
 
 //
 // fetch(jobs_url).then(resp=>resp.json()).then(data=>data['jobs']).then(jobs => {
