@@ -2,17 +2,103 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Example Option 3 Job Board</title>
+    <title>Example Option 4 Job Board</title>
     <link rel="stylesheet" href="./index.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   </head>
   <body>
+    <h1>The API-Powered Job Board w/ Embedded Application Forms</h1>
     <h2>Current Job Openings By City:</h2>
     <div id="jobs-by-office">
     </div>
     <h2>Current Job Openings By Department:</h2>
     <div id="jobs-by-department">
     </div>
+    <h1>How it's done</h1>
+    <p>Add the following to your careers page:</p>
+    <pre>
+      <code>
+        &#60;h2&#62;Current Job Openings By City:&#60;/h2&#62;
+        &#60;div id="jobs-by-office"&#62;
+        &#60;/div&#62;
+        &#60;h2&#62;Current Job Openings By Department:&#60;/h2&#62;
+        &#60;div id="jobs-by-department"&#62;
+        &#60;/div&#62;
+      </code>
+    </pre>
+    <p>Add the following to your job post page:</p>
+    <pre>
+      <code>
+        &#60;div id="grnhse_app"&#62;&#60;/div&#62;
+        &#60;script src="https://boards.greenhouse.io/embed/job_board/js?for=cardboard"&#62;&#60;/script&#62;
+      </code>
+    </pre>
+    <p>Add the following to your javascript file:</p>
+    <pre>
+      <code>
+        let offices_url = "https://api.greenhouse.io/v1/boards/cardboard/offices?content=true"
+        let departments_url = "https://api.greenhouse.io/v1/boards/cardboard/departments?content=true"
+        let jobs_url = "https://api.greenhouse.io/v1/boards/cardboard/jobs?content=true"
+
+        fetch(offices_url).then(resp=>resp.json()).then(data=>data['offices']).then(offices=>{
+          offices.forEach(office=>{
+            // exclude jobs w/ No Office
+            if (office['name']!=="No Office"){
+              // generate headers & ul for each office
+              let h3 = document.createElement('h3')
+              h3.setAttribute('id',`${office['name']}-header`)
+              h3.innerHTML=office['name']
+              document.getElementById('jobs-by-office').appendChild(h3)
+              let ul = document.createElement('ul')
+              ul.setAttribute('id',`${office['name']}`)
+              document.getElementById(`${office['name']}-header`).appendChild(ul)
+            }
+          })
+          fetch(jobs_url).then(resp=>resp.json()).then(data=>data['jobs']).then(jobs=>{
+            jobs.forEach(job=>{
+              // create links to job posts and add them under their corresponding office
+              let li = document.createElement('li')
+              li.innerHTML = (`&#60;a href='./job.html?gh_jid=${job['id']}'&#62;${job['title']}&#60;/a&#62;`)
+              let office_ul = document.getElementById(`${job['offices'][0]['name']}`)
+              office_ul.appendChild(li)
+            })
+          })
+        })
+
+        fetch(departments_url).then(resp=>resp.json()).then(data=>data['departments']).then(departments=>{
+          departments.forEach(department=>{
+            // exclude jobs w/ No Department
+            if(department['name']!=="No Department"){
+              // generate headers & ul for each department
+              let h3 = document.createElement('h3')
+              h3.setAttribute('id',`${department['name']}-header`)
+              h3.innerHTML=department['name']
+              document.getElementById('jobs-by-department').appendChild(h3)
+              let ul = document.createElement('ul')
+              ul.setAttribute('id',`${department['name']}`)
+              document.getElementById(`${department['name']}-header`).appendChild(ul)
+            }
+          })
+          fetch(jobs_url).then(resp=>resp.json()).then(data=>data['jobs']).then(jobs=>{
+            jobs.forEach(job=>{
+              // create links to job posts and add them under their corresponding department
+              let li = document.createElement('li')
+              li.innerHTML = (`&#60;a href='./job.html?gh_jid=${job['id']}'&#62;${job['title']}&#60;/a&#62;`)
+              let dept_ul = document.getElementById(`${job['departments'][0]['name']}`)
+              dept_ul.appendChild(li)
+            })
+            // add placeholder for offices/departments that have no job posts
+            Array.from(document.getElementsByTagName('ul')).forEach(ul=>{
+              if(ul.childElementCount===0){
+                let li=document.createElement('li')
+                li.innerHTML="No openings at this time"
+                ul.appendChild(li)
+              }
+            })
+          })
+        })
+      </code>
+    </pre>
     <script type="text/javascript" src="./index.js"></script>
   </body>
 </html>
