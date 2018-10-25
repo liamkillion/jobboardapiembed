@@ -9,8 +9,16 @@ fetch(offices_url).then(resp=>resp.json()).then(data=>data['offices']).then(offi
     h3.innerHTML=office['name']
     document.getElementById('jobs-by-office').appendChild(h3)
     let ul = document.createElement('ul')
-    ul.setAttribute('id',`${office['name']}-ul`)
+    ul.setAttribute('id',`${office['name']}`)
     document.getElementById(`${office['name']}-header`).appendChild(ul)
+  })
+  fetch(jobs_url).then(resp=>resp.json()).then(data=>data['jobs']).then(jobs=>{
+    jobs.forEach(job=>{
+      let li = document.createElement('li')
+      li.innerHTML = (`<a href='./job.html?gh_jid=${job['id']}'>${job['title']}</a>`)
+      let office_ul = document.getElementById(`${job['offices'][0]['name']}`)
+      office_ul.appendChild(li)
+    })
   })
 })
 
@@ -21,21 +29,22 @@ fetch(departments_url).then(resp=>resp.json()).then(data=>data['departments']).t
     h3.innerHTML=department['name']
     document.getElementById('jobs-by-department').appendChild(h3)
     let ul = document.createElement('ul')
-    ul.setAttribute('id',`${department['name']}-ul`)
+    ul.setAttribute('id',`${department['name']}`)
     document.getElementById(`${department['name']}-header`).appendChild(ul)
+  })
+  fetch(jobs_url).then(resp=>resp.json()).then(data=>data['jobs']).then(jobs=>{
+    jobs.forEach(job=>{
+      let li = document.createElement('li')
+      li.innerHTML = (`<a href='./job.html?gh_jid=${job['id']}'>${job['title']}</a>`)
+      let dept_ul = document.getElementById(`${job['departments'][0]['name']}`)
+      dept_ul.appendChild(li)
+    })
   })
 })
 
-fetch(jobs_url).then(resp=>resp.json()).then(data=>data['jobs']).then(jobs=>{
-  jobs.forEach ???
-})
-
-//
-// fetch(jobs_url).then(resp=>resp.json()).then(data=>data['jobs']).then(jobs => {
-//   jobs.forEach(job => {
-//       let li = document.createElement('li')
-//       document.getElementById('ybor_city').appendChild(li)
-//       li.innerHTML = (`<a href=./job.html?gh_jid=${job['id']}</a>`)
-//     }
-//   })
+// let uls=document.getElementsByTagName('ul')
+// uls.forEach(ul=>{
+//   if(ul:empty){
+//     ul.setAttribute('style','display:none')
+//   }
 // })
