@@ -39,12 +39,12 @@ fetch(departments_url).then(resp=>resp.json()).then(data=>data['departments']).t
       let dept_ul = document.getElementById(`${job['departments'][0]['name']}`)
       dept_ul.appendChild(li)
     })
+    Array.from(document.getElementsByTagName('ul')).forEach(ul=>{
+      if(ul.childElementCount===0){
+        let li=document.createElement('li')
+        li.innerHTML="No openings at this time"
+        ul.appendChild(li)
+      }
+    })
   })
 })
-
-// let uls=document.getElementsByTagName('ul')
-// uls.forEach(ul=>{
-//   if(ul:empty){
-//     ul.setAttribute('style','display:none')
-//   }
-// })
