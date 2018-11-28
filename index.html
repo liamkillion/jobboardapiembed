@@ -74,7 +74,7 @@
           })
         })
 
-        <span class="comment">// make a GET request to the Greenhouse Job Board API departments endpoint, and then for each department
+        <span class="comment">// make a GET request to the Greenhouse Job Board API departments endpoint, and then for each department</span>
         fetch(departments_url).then(resp=>resp.json()).then(data=>data['departments']).then(departments=>{
           departments.forEach(department=>{
             <span class="comment">// exclude jobs w/ No Department</span>
